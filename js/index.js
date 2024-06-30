@@ -56,9 +56,9 @@ let shoppingList = {}
 // remover item
 //zerar
 
-
-document.addEventListener('DOMContentLoaded', () => {
+const mountCards = () => {
     const div = document.querySelector(".items-container")
+    div.innerText = ""
     for(const index in items){
         const item = items[index]
         const itemCard = document.createElement('div')
@@ -71,7 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <h5>${item.name}</h5>
                     <h6>R$ ${item.price},00</h6>
                 </div>
-                <h6>${shoppingList[item.name] ?? 0 }</h6>
+                <h6 id="quantity-${item.name.replace(/\s/g, "")}">${shoppingList[item.name] ?? 0 }</h6>
             </div>
             <div class='buttons'>
                 <button id='add-${item.name}'>+</button>
@@ -83,10 +83,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
         configureButtonActions(item)
     }
+}
 
-    const resetButton = document.querySelector('#reset')
-    resetButton.addEventListener('click', () => updateTotalValue(0))
-})
+const updateQuantity = (name) => {
+    const quantityText = document.querySelector(`#quantity-${name.replace(/\s/g, "")}`)
+    if(!quantityText) return
+    quantityText.innerText = shoppingList[name]
+
+}
 
 const updateTotalValue = () => {
     totalPrice = 0
@@ -94,9 +98,12 @@ const updateTotalValue = () => {
         const quantity = shoppingList[shoppingItem]
         const itemPrice = items.find(item => item.name === shoppingItem).price
         totalPrice = totalPrice + itemPrice * quantity
+        
+        updateQuantity(shoppingItem)
     }
     const total = document.querySelector('.price')
     total.innerText = `R$ ${totalPrice},00`
+
 }
 
 const configureButtonActions = (item) => {
@@ -118,3 +125,14 @@ const removeItem = (item) => {
     shoppingList[item.name]--
     updateTotalValue()
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+    mountCards()
+
+    const resetButton = document.querySelector('#reset')
+    resetButton.addEventListener('click', () => {
+        shoppingList={}
+        updateTotalValue()
+        mountCards()
+    })
+})

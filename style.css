@@ -20,6 +20,15 @@ button{
     grid-template-columns: 1fr 1fr;
     gap: 8px;
 }
+.items-container .wrapper{
+    display: flex;
+    justify-content: space-between;
+}
+.items-container .wrapper .wrapper-data{
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
 
 .items-container .buttons{
     display: grid;
@@ -36,6 +45,7 @@ button{
     padding: 8px;
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
     gap: 8px;
     border-radius: 8px;
 }
